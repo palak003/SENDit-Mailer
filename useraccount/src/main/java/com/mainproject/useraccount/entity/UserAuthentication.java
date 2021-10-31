@@ -7,9 +7,22 @@ public class UserAuthentication {
 
     @Id
     private int id;
+
     private String name;
     private  String mailAddress;
     private String password;
+
+    public UserAuthentication(){
+
+    }
+
+    public UserAuthentication(int id,String name,String mailAddress,String password)
+    {
+        this.id=id;
+        this.name=name;
+        this.mailAddress=mailAddress;
+        this.password=password;
+    }
 
     public String getPassword() {
         return password;

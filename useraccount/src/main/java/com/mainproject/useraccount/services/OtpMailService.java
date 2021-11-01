@@ -17,13 +17,13 @@ public class OtpMailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public void sendOtpMail(UserAuthentication details, int otp) {
+    public void sendOtpMail(String mail, int otp) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setSubject("first otp");
             mimeMessageHelper.setFrom(new InternetAddress("goelpalak003@gmail.com", "PalakMailer.com"));
-            mimeMessageHelper.setTo(details.getMailAddress());
+            mimeMessageHelper.setTo(mail);
             mimeMessageHelper.setText("the otp is " + otp);
 
             javaMailSender.send(mimeMessage);

@@ -30,7 +30,7 @@ public class OtpController {
     Login userLogin =new Login();
 
 
-    @PostMapping("/generateOtp")
+    @PostMapping("/user/generateOtp")
     public String generateOtp(@RequestBody UserAuthentication details) {
         user=details;
         if(!CollectionUtils.isEmpty(this.otpRepo.findByMailAddress(user.getMailAddress()))){
@@ -43,7 +43,7 @@ public class OtpController {
         }
     }
 
-    @PostMapping("/forgot")
+    @PostMapping("/user/forgot")
     public String forgotPass(@RequestBody Login details)
     {
         userLogin=details;
@@ -60,7 +60,7 @@ public class OtpController {
     }
 
 
-    @GetMapping("/validate")
+    @GetMapping("/user/validate")
     public String validateOtp(@RequestParam(name="givenOtp") int givenOtp)
     {
         final String SUCCESS = "Entered Otp is valid";
@@ -96,7 +96,7 @@ public class OtpController {
     }
 
 
-    @GetMapping("/forgotValidate")
+    @GetMapping("/user/forgotValidate")
     public String validateForgotOtp(@RequestParam(name="forgotOtp") int forgotOtp){
         final String SUCCESS = "Entered Otp is valid";
 

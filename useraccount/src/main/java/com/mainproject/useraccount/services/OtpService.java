@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+
 @Service
 public class OtpService{
 
@@ -46,10 +47,4 @@ public class OtpService{
         return otp;
     }
 
-    public int generateForgotOtp(String mailAddress) {
-        Random random = new Random();
-        int otp = 100000 + random.nextInt(900000);
-        otpCache.put(mailAddress, otp);
-        return otp;
-    }
 }

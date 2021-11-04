@@ -1,6 +1,7 @@
 package com.mainproject.useraccount.controllers;
 
 import com.mainproject.useraccount.entity.Login;
+import com.mainproject.useraccount.entity.Otp;
 import com.mainproject.useraccount.entity.UserAuthentication;
 import com.mainproject.useraccount.services.OtpMailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins= "http://localhost:3000")
+@CrossOrigin(origins= "http://a277-203-81-240-173.ngrok.io/")
 public class OtpController {
 
     @Autowired
     private OtpMailService otpMailService;
+
 
     @PostMapping("/user/generateOtp")
     public String generateOtp(@RequestBody UserAuthentication details) {
@@ -21,9 +23,8 @@ public class OtpController {
     }
 
     @PostMapping("/user/validate")
-    public String validateOtp(@RequestBody Map<String,Integer> request) {
-        int givenOtp = request.get("givenOtp");
-        return this.otpMailService.validateSignUp(givenOtp);
+    public String validateOtp(@RequestBody Otp givenOtpDetails) {
+        return this.otpMailService.validateSignUp(givenOtpDetails);
     }
 
 
@@ -34,9 +35,8 @@ public class OtpController {
     }
 
     @PostMapping("/user/forgotValidate")
-    public String validateForgotOtp(@RequestBody Map<String,Integer> request){
-        int givenOtp=request.get("givenOtp");
-        return this.otpMailService.validateForgotOtp(givenOtp);
+    public String validateForgotOtp(@RequestBody Otp forgotPassDetails){
+        return this.otpMailService.validateForgotOtp(forgotPassDetails);
     }
 
 }

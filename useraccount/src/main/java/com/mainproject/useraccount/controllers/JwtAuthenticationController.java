@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins= "http://localhost:3000")
+@CrossOrigin(origins= "http://a277-203-81-240-173.ngrok.io/")
 public class JwtAuthenticationController {
 
     @Autowired

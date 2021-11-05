@@ -1,6 +1,5 @@
 package com.mainproject.useraccount.services;
 
-import com.mainproject.useraccount.entity.Login;
 import com.mainproject.useraccount.entity.Otp;
 import com.mainproject.useraccount.entity.UserAuthentication;
 import com.mainproject.useraccount.repository.UserAuthenticationRepository;
@@ -31,6 +30,7 @@ public class OtpMailService {
 
     @Autowired
     private UserAuthenticationRepository otpRepo;
+
 
 
 
@@ -67,7 +67,7 @@ public class OtpMailService {
                     otpService.clearOTP(givenOtpdetails.getMailAddress());
                     return ("You are registered successfully");
                 }else{
-                    return SUCCESS;
+                    return FAIL;
                 }
             }else {
                 return FAIL;
@@ -83,7 +83,7 @@ public class OtpMailService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setSubject("first otp");
-            mimeMessageHelper.setFrom(new InternetAddress("goelpalak003@gmail.com", "PalakMailer.com"));
+            mimeMessageHelper.setFrom(new InternetAddress("mailersendit@gmail.com", "PalakMailer.com"));
             mimeMessageHelper.setTo(mail);
             mimeMessageHelper.setText("the otp is " + otp);
 
@@ -95,7 +95,7 @@ public class OtpMailService {
         }
     }
 
-    public String forgotPass(Login forgotDetails)
+    public String forgotPass(UserAuthentication forgotDetails)
     { if(!isValid(forgotDetails.getMailAddress(),forgotDetails.getPassword())){
         return "invalid mail-id/password";
     }
@@ -127,7 +127,7 @@ public class OtpMailService {
                     otpService.clearOTP(forgotOtpDetails.getMailAddress());
                     return ("Changed the password successfully");
                 }else{
-                    return SUCCESS;
+                    return FAIL;
                 }
             }else {
                 return FAIL;

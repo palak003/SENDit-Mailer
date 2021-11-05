@@ -2,8 +2,8 @@ package com.mainproject.useraccount.entity;
 
 
 
-public class Otp {
 
+public class Otp {
 
     private int givenOtp;
     private String name;

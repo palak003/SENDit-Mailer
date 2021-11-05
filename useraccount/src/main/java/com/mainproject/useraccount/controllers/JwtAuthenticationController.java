@@ -1,19 +1,17 @@
 package com.mainproject.useraccount.controllers;
 
-import java.util.Objects;
-
 
 import com.mainproject.useraccount.configuration.JwtTokenUtil;
 import com.mainproject.useraccount.entity.JwtRequest;
 import com.mainproject.useraccount.entity.JwtResponse;
+import com.mainproject.useraccount.entity.UserAuthentication;
+import com.mainproject.useraccount.repository.UserAuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,36 +19,44 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins= "http://a277-203-81-240-173.ngrok.io/")
+@CrossOrigin(origins= "http://8734-202-142-121-222.ngrok.io/")
 public class JwtAuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private UserDetailsService jwtUserDetailsService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserAuthenticationRepository otprepo;
+
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        boolean login=authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+if(login) {
+    final UserDetails userDetails = jwtUserDetailsService
+            .loadUserByUsername(authenticationRequest.getUsername());
 
-        final UserDetails userDetails = jwtUserDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+    final String token = jwtTokenUtil.generateToken(userDetails);
+    return ResponseEntity.ok(new JwtResponse(token));
 
-        final String token = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new JwtResponse(token));
+}
+else
+{
+    return new ResponseEntity<>("Invalid credentials",HttpStatus.OK);
+}
     }
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
+    private boolean authenticate(String username, String password) throws Exception {
+        UserAuthentication user = this.otprepo.findByMailAddress(username).get(0);
+        if (passwordEncoder.matches(password, user.getPassword()))
+            return true;
+        else
+            return false;
     }
+
 }

@@ -83,7 +83,7 @@ public class OtpMailService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setSubject("first otp");
-            mimeMessageHelper.setFrom(new InternetAddress("mailersendit@gmail.com", "PalakMailer.com"));
+            mimeMessageHelper.setFrom(new InternetAddress("mailersendit@gmail.com", "SEND-itMailer.com"));
             mimeMessageHelper.setTo(mail);
             mimeMessageHelper.setText("the otp is " + otp);
 

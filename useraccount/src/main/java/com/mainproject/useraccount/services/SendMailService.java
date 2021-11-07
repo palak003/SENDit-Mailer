@@ -22,7 +22,7 @@ public class SendMailService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setSubject(mail.getSubject());
-            mimeMessageHelper.setFrom(new InternetAddress(mail.getMailFrom(), "PalakMailer.com"));
+            mimeMessageHelper.setFrom(new InternetAddress(mail.getMailFrom(), "SENDit-Mailer.com"));
             mimeMessageHelper.setTo(mail.getMailTo());
             mimeMessageHelper.setText(mail.getContent());
 

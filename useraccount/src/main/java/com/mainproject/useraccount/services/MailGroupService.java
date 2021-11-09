@@ -29,9 +29,9 @@ public class MailGroupService {
     public void create(MailGroup mailGroup) {
         MailGroup newEntry=new MailGroup();
         newEntry.setGroupName(mailGroup.getGroupName());
-        String[] lines=mailGroup.getMailAddresses().split(","); // \\n
+        String[] mails=mailGroup.getMailAddresses().split(","); // \\n
         ArrayList<String> group = new ArrayList<String>();
-        for(String line:lines)
+        for(String line:mails)
         {
             String regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
             Pattern pattern = Pattern.compile(regex);
@@ -49,7 +49,16 @@ public class MailGroupService {
     public String[] givegroup(String groupName) {
         List<MailGroup> list=this.mailGroupRepo.findBygroupName(groupName);
         MailGroup mailGroup=list.get(0);
-        String[] lines= mailGroup.getMailAddresses().split(",");
-        return lines;
+        String[] mails= mailGroup.getMailAddresses().split(",");
+        return mails;
+    }
+
+   public String[] getGroupNames(){
+        List<String> list=this.mailGroupRepo.tempQuery();
+        String str[] = new String[list.size()];
+        for (int j = 0; j < list.size(); j++) {
+            str[j] = list.get(j);
+        }
+        return str;
     }
 }

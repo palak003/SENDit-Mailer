@@ -81,7 +81,7 @@ private Environment env;
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/authenticate","/h2/**","/user/**").permitAll().
+                .authorizeRequests().antMatchers("/authenticate","/h2/**","/user/**","/group/**").permitAll().
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().
                 // make sure we use stateless session; session won't be used to

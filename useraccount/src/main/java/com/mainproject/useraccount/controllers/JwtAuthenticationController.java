@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins= "http://8734-202-142-121-222.ngrok.io/")
+@CrossOrigin(origins= "http://5620-202-142-121-1.ngrok.io/")
 public class JwtAuthenticationController {
 
 

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins= "http://8734-202-142-121-222.ngrok.io/")
+@CrossOrigin(origins= "http://5620-202-142-121-1.ngrok.io/")
 public class OtpController {
 
     @Autowired

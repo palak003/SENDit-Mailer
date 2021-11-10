@@ -43,9 +43,7 @@ private Environment env;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // configure AuthenticationManager so that it knows from where to load
-        // user for matching credentials
-        // Use BCryptPasswordEncoder
+
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder);
     }
 
@@ -78,14 +76,12 @@ private Environment env;
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.headers().frameOptions().disable();
-        // We don't need CSRF for this example
-        httpSecurity.csrf().disable()
+        // We don't need CSRF
+        httpSecurity.cors().and().csrf().disable()
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/authenticate","/h2/**","/user/**","/group/**").permitAll().
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().
-                // make sure we use stateless session; session won't be used to
-                // store user's state.
                         exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

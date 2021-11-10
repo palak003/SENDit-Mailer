@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins="http://5620-202-142-121-1.ngrok.io/")
+@CrossOrigin(origins="http://0a49-202-142-122-239.ngrok.io/")
 public class MailGroupController {
 
     @Autowired
@@ -32,9 +32,15 @@ public class MailGroupController {
     }
 
     @GetMapping("/group/giveGroupName")
-    public String[] giveGroup(@RequestParam String groupName)
+    public String[] giveGroup(@RequestParam(name="groupName") String groupName)
     {
         return this.mailGroupService.givegroup(groupName);
     }
+
+   @DeleteMapping("/group/deleteGroup")
+    public String deleteGroup(@RequestParam(name="groupDelete") String groupDelete)
+   {
+       return this.mailGroupService.deleteOne(groupDelete);
+   }
 
 }

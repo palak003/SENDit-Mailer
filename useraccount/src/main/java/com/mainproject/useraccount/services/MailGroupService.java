@@ -45,12 +45,7 @@ public class MailGroupService {
         this.mailGroupRepo.save(newEntry);
     }
 
-    public String[] givegroup(String groupName) {
-        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupName);
-        MailGroup mailGroup = list.get(0);
-        String[] mails = mailGroup.getMailAddresses().split(",");
-        return mails;
-    }
+
 
     public String[] getGroupNames() {
         List<String> list = this.mailGroupRepo.tempQuery();
@@ -61,6 +56,13 @@ public class MailGroupService {
         return str;
     }
 
+    public String[] givegroup(String groupName) {
+        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupName);
+        MailGroup mailGroup = list.get(0);
+        String[] mails = mailGroup.getMailAddresses().split(",");
+        return mails;
+    }
+
     public String deleteOne(String groupDelete) {
         List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupDelete);
         MailGroup mailGroup = list.get(0);
@@ -69,7 +71,7 @@ public class MailGroupService {
         else {
             this.mailGroupRepo.delete(mailGroup);
             return "removed the group successfully";
-
         }
+
     }
 }

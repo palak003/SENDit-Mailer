@@ -13,4 +13,6 @@ public interface MailGroupRepo extends JpaRepository<MailGroup,String> {
 
     @Query("SELECT ti.groupName from MailGroup ti")
     public List<String> tempQuery();
+
+
 }

@@ -5,8 +5,11 @@ import com.mainproject.useraccount.services.MailGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
-@CrossOrigin(origins="http://0a49-202-142-122-239.ngrok.io/")
+@RequestMapping("/api")
+@CrossOrigin(origins="*")
 public class MailGroupController {
 
     @Autowired
@@ -32,9 +35,9 @@ public class MailGroupController {
     }
 
     @GetMapping("/group/giveGroupName")
-    public String[] giveGroup(@RequestParam(name="groupName") String groupName)
+    public String[] giveGroup(@RequestBody Map<Object,String> request)
     {
-        return this.mailGroupService.givegroup(groupName);
+        return this.mailGroupService.givegroup(request.get("groupName"));
     }
 
    @DeleteMapping("/group/deleteGroup")

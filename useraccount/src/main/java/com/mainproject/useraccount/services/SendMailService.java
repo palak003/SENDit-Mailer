@@ -4,6 +4,7 @@ import com.mainproject.useraccount.entity.SendMail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
@@ -17,6 +18,7 @@ public class SendMailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Async("threadPoolTaskExecutor")
     public void sendmail(SendMail mail) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {

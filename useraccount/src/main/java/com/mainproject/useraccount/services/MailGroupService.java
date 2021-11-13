@@ -18,8 +18,7 @@ public class MailGroupService {
     private MailGroupRepo mailGroupRepo;
 
     public String uniqueGroupName(String groupName) {
-        //uppercase groupname conditions to be added
-        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupName);
+        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupName.toUpperCase());
         if (!CollectionUtils.isEmpty(list))
             return "Please choose another name";
         else
@@ -28,7 +27,7 @@ public class MailGroupService {
 
     public void create(MailGroup mailGroup) {
         MailGroup newEntry = new MailGroup();
-        newEntry.setGroupName(mailGroup.getGroupName());
+        newEntry.setGroupName(mailGroup.getGroupName().toUpperCase());
         String[] mails = mailGroup.getMailAddresses().split(","); // \\n
         ArrayList<String> group = new ArrayList<String>();
         for (String line : mails) {
@@ -49,7 +48,7 @@ public class MailGroupService {
 
     public String[] getGroupNames() {
         List<String> list = this.mailGroupRepo.tempQuery();
-        String str[] = new String[list.size()];
+        String[] str = new String[list.size()];
         for (int j = 0; j < list.size(); j++) {
             str[j] = list.get(j);
         }
@@ -57,20 +56,25 @@ public class MailGroupService {
     }
 
     public String[] givegroup(String groupName) {
-        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupName);
+        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupName.toUpperCase());
+
+        if(!CollectionUtils.isEmpty(list)){
         MailGroup mailGroup = list.get(0);
         String[] mails = mailGroup.getMailAddresses().split(",");
-        return mails;
+        return mails;}
+        else
+            return new String[]{"Please choose valid group name"};
+
     }
 
     public String deleteOne(String groupDelete) {
-        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupDelete);
-        MailGroup mailGroup = list.get(0);
-        if (CollectionUtils.isEmpty(list))
-            return "Please choose valid group name";
-        else {
+        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupDelete.toUpperCase());
+        if (!CollectionUtils.isEmpty(list)){
+            MailGroup mailGroup = list.get(0);
             this.mailGroupRepo.delete(mailGroup);
-            return "removed the group successfully";
+        return "removed the group successfully";}
+        else {
+            return "Please choose valid group name";
         }
 
     }

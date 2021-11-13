@@ -37,7 +37,7 @@ public class MailGroupController {
     @GetMapping("/group/giveGroupName")
     public String[] giveGroup(@RequestBody Map<Object,String> request)
     {
-        return this.mailGroupService.givegroup(request.get("groupName"));
+        return this.mailGroupService.givegroup( request.get("groupName"));
     }
 
    @DeleteMapping("/group/deleteGroup")

@@ -79,7 +79,7 @@ private Environment env;
         // We don't need CSRF
         httpSecurity.cors().and().csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/authenticate","/h2/**","/user/**","/api/**").permitAll().
+                .authorizeRequests().antMatchers("/api/authenticate","/h2/**","/api/user/**").permitAll().  //bina token
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().
                         exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

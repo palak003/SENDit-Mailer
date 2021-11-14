@@ -1,19 +1,38 @@
 package com.mainproject.useraccount.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Entity
 public class MailGroup {
 
     @Id
+@GeneratedValue
+private int groupId;
     private String groupName;
 
     @Lob
     @Column(columnDefinition="text")
     private String mailAddresses;
+
+    @ManyToOne
+    @JoinColumn(name="user_id",referencedColumnName = "id")
+    private UserAuthentication userAuthentication;
+
+    public UserAuthentication getUserAuthentication() {
+        return userAuthentication;
+    }
+
+    public void setUserAuthentication(UserAuthentication userAuthentication) {
+        this.userAuthentication = userAuthentication;
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
 
     public String getMailAddresses() {
         return mailAddresses;

@@ -1,7 +1,9 @@
 package com.mainproject.useraccount.services;
 
 import com.mainproject.useraccount.entity.MailGroup;
+import com.mainproject.useraccount.entity.UserAuthentication;
 import com.mainproject.useraccount.repository.MailGroupRepo;
+import com.mainproject.useraccount.repository.UserAuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -17,16 +19,30 @@ public class MailGroupService {
     @Autowired
     private MailGroupRepo mailGroupRepo;
 
-    public String uniqueGroupName(String groupName) {
-        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupName.toUpperCase());
-        if (!CollectionUtils.isEmpty(list))
+    @Autowired
+    private UserAuthenticationRepository userAuthenticationRepository;
+
+    public String uniqueGroupName(String groupName,String username) {
+        List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
+        UserAuthentication user=userList.get(0);
+        List<String> list = this.mailGroupRepo.tempQuery(user.getId());
+
+        if(list.contains(groupName.toUpperCase()))
             return "Please choose another name";
         else
             return "Added the group name now upload the mailAddresses";
+
     }
 
-    public void create(MailGroup mailGroup) {
+    public void create(MailGroup mailGroup, String userName) {
+        List<UserAuthentication> userAuthenticationList = userAuthenticationRepository.findByMailAddress(userName);
+        UserAuthentication user = userAuthenticationList.get(0);
         MailGroup newEntry = new MailGroup();
+        newEntry.setUserAuthentication(user);
+        if(CollectionUtils.isEmpty(user.getMailGroupList())){
+            user.setMailGroupList(new ArrayList<>());
+        }
+        user.getMailGroupList().add(newEntry);
         newEntry.setGroupName(mailGroup.getGroupName().toUpperCase());
         String[] mails = mailGroup.getMailAddresses().split(","); // \\n
         ArrayList<String> group = new ArrayList<String>();
@@ -46,8 +62,10 @@ public class MailGroupService {
 
 
 
-    public String[] getGroupNames() {
-        List<String> list = this.mailGroupRepo.tempQuery();
+    public String[] getGroupNames(String username) {
+        List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
+        UserAuthentication user=userList.get(0);
+        List<String> list = this.mailGroupRepo.tempQuery(user.getId());
         String[] str = new String[list.size()];
         for (int j = 0; j < list.size(); j++) {
             str[j] = list.get(j);
@@ -55,23 +73,30 @@ public class MailGroupService {
         return str;
     }
 
-    public String[] givegroup(String groupName) {
-        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupName.toUpperCase());
+    public String[] givegroup(String groupName,String username) {
+        List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
+        UserAuthentication user=userList.get(0);
+        List<String> list = this.mailGroupRepo.tempQuery(user.getId());
 
-        if(!CollectionUtils.isEmpty(list)){
-        MailGroup mailGroup = list.get(0);
-        String[] mails = mailGroup.getMailAddresses().split(",");
-        return mails;}
+        if(list.contains(groupName.toUpperCase())){
+        String str=this.mailGroupRepo.findBygroupNAME(groupName.toUpperCase(),user.getId());
+        String[] mails = str.split(",");
+        return mails;
+        }
         else
             return new String[]{"Please choose valid group name"};
 
     }
 
-    public String deleteOne(String groupDelete) {
-        List<MailGroup> list = this.mailGroupRepo.findBygroupName(groupDelete.toUpperCase());
-        if (!CollectionUtils.isEmpty(list)){
-            MailGroup mailGroup = list.get(0);
-            this.mailGroupRepo.delete(mailGroup);
+    public String deleteOne(String groupDelete,String username) {
+
+        List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
+        UserAuthentication user=userList.get(0);
+        List<String> list = this.mailGroupRepo.tempQuery(user.getId());
+
+        if (list.contains(groupDelete.toUpperCase())){
+           MailGroup mailGroup=this.mailGroupRepo.findBygroupname(groupDelete.toUpperCase(),user.getId());
+           this.mailGroupRepo.delete(mailGroup);
         return "removed the group successfully";}
         else {
             return "Please choose valid group name";
@@ -79,3 +104,5 @@ public class MailGroupService {
 
     }
 }
+
+//jwt auth and h2 and bcc and scheduling and not saving same recipient mailAddress

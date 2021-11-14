@@ -1,8 +1,9 @@
 package com.mainproject.useraccount.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class UserAuthentication {
 
@@ -13,6 +14,16 @@ public class UserAuthentication {
     private String name;
     private  String mailAddress;
     private String password;
+    @OneToMany(mappedBy="userAuthentication",cascade= CascadeType.ALL)
+    private List<MailGroup> mailGroupList = new ArrayList<>();
+
+    public List<MailGroup> getMailGroupList() {
+        return mailGroupList;
+    }
+
+    public void setMailGroupList(List<MailGroup> mailGroupList) {
+        this.mailGroupList = mailGroupList;
+    }
 
     public UserAuthentication(){
 

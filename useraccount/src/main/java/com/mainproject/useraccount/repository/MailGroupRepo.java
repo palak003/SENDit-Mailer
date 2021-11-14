@@ -11,8 +11,12 @@ public interface MailGroupRepo extends JpaRepository<MailGroup,String> {
 
     List<MailGroup> findBygroupName(String groupName);
 
-    @Query("SELECT ti.groupName from MailGroup ti")
-    public List<String> tempQuery();
+    @Query("SELECT ti.groupName from MailGroup ti where ti.userAuthentication.id=?1")
+    public List<String> tempQuery(int userId);
 
+    @Query("SELECT ti from MailGroup ti where ti.groupName=?1 AND ti.userAuthentication.id=?2 ")
+    MailGroup findBygroupname(String groupDelete,int id);
 
+    @Query("SELECT ti.mailAddresses from MailGroup ti where ti.groupName=?1 AND ti.userAuthentication.id=?2 ")
+    String findBygroupNAME(String toUpperCase, int id);
 }

@@ -15,7 +15,7 @@ public class SendMailController {
     private SendMailService sendMailService;
 
     @PostMapping("/mail")
-    public void firstMail(@RequestBody SendMail mail){
-        this.sendMailService.sendmail(mail);
+    public String firstMail(@RequestBody SendMail mail){
+        return this.sendMailService.sendmail(mail);
     }
 }

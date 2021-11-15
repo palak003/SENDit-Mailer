@@ -6,7 +6,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -19,7 +18,7 @@ public class SendMailService {
     private JavaMailSender javaMailSender;
 
     @Async("threadPoolTaskExecutor")
-    public void sendmail(SendMail mail) {
+    public String sendmail(SendMail mail) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
@@ -35,5 +34,6 @@ public class SendMailService {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        return "Mail Sent!!!";
     }
 }

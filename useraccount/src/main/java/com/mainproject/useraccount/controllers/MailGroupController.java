@@ -21,7 +21,7 @@ public class MailGroupController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/group/unique")
-    public String uniqueGroup(@RequestParam(name="groupName") String groupName, HttpServletRequest request)
+    public String uniqueGroup(@RequestBody Map<Object,String> req, HttpServletRequest request)
     {
         final String requestTokenHeader = request.getHeader("Authorization");
         String jwtToken = null;
@@ -34,7 +34,7 @@ public class MailGroupController {
                 System.out.println("Unable to get JWT Token");
             }
         }
-        return this.mailGroupService.uniqueGroupName(groupName,userName);
+        return this.mailGroupService.uniqueGroupName(req.get("groupName"),userName);
     }
 
     @PostMapping("/group/addGroup")
@@ -92,7 +92,7 @@ public class MailGroupController {
     }
 
    @DeleteMapping("/group/deleteGroup")
-    public String deleteGroup(@RequestParam(name="groupDelete") String groupDelete,HttpServletRequest request)
+    public String deleteGroup(@RequestBody Map<Object,String> req,HttpServletRequest request)
    {
        final String requestTokenHeader = request.getHeader("Authorization");
        String jwtToken = null;
@@ -105,7 +105,7 @@ public class MailGroupController {
                System.out.println("Unable to get JWT Token");
            }
        }
-       return this.mailGroupService.deleteOne(groupDelete,userName);
+       return this.mailGroupService.deleteOne(req.get("groupDelete"),userName);
    }
 
 }

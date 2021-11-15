@@ -105,4 +105,4 @@ public class MailGroupService {
     }
 }
 
-//jwt auth and h2 and bcc and scheduling and not saving same recipient mailAddress
+// bcc and scheduling and not saving same recipient mailAddress

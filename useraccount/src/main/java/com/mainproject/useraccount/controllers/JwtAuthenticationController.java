@@ -6,12 +6,14 @@ import com.mainproject.useraccount.entity.JwtRequest;
 import com.mainproject.useraccount.entity.JwtResponse;
 import com.mainproject.useraccount.entity.UserAuthentication;
 import com.mainproject.useraccount.repository.UserAuthenticationRepository;
+import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,8 +40,8 @@ public class JwtAuthenticationController {
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
-        boolean login=authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-if(login) {
+        int login=authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+if(login==1) {
     final UserDetails userDetails = jwtUserDetailsService
             .loadUserByUsername(authenticationRequest.getUsername());
 
@@ -47,17 +49,28 @@ if(login) {
     return ResponseEntity.ok(new JwtResponse(token));
 
 }
-else
+else if(login==2)
 {
     return new ResponseEntity<>("Invalid credentials",HttpStatus.OK);
 }
+else if(login==0) {
+    return new ResponseEntity<>("You don't have any account please signUp first", HttpStatus.OK);
+}
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
-    private boolean authenticate(String username, String password) throws Exception {
-        UserAuthentication user = this.otprepo.findByMailAddress(username).get(0);
-        if (passwordEncoder.matches(password, user.getPassword()))
-            return true;
-        else
-            return false;
+
+    private int authenticate(String username, String password) throws Exception {
+
+
+        if(CollectionUtils.isEmpty(this.otprepo.findByMailAddress(username)))
+            return 0;
+        else {
+            UserAuthentication user = this.otprepo.findByMailAddress(username).get(0);
+            if (passwordEncoder.matches(password, user.getPassword()))
+                return 1;
+            else
+                return 2;
+        }
     }
 
 }

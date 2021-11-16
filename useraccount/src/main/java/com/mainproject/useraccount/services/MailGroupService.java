@@ -23,16 +23,21 @@ public class MailGroupService {
     private UserAuthenticationRepository userAuthenticationRepository;
 
     public String uniqueGroupName(String groupName,String username) {
-        List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
-        UserAuthentication user=userList.get(0);
-        List<String> list = this.mailGroupRepo.tempQuery(user.getId());
+if(groupName=="")
+    return "Please provide a group Name";
 
-        if(list.contains(groupName.toUpperCase()))
-            return "Please choose another name";
-        else
-            return "Added the group name now upload the mailAddresses";
+else{
+            List<UserAuthentication> userList = this.userAuthenticationRepository.findByMailAddress(username);
+            UserAuthentication user = userList.get(0);
+            List<String> list = this.mailGroupRepo.tempQuery(user.getId());
+            if (list.contains(groupName.toUpperCase()))
+                return "Please choose another name";
 
-    }
+            else
+                return "Added the groupName successfully now upload the mailAddresses";
+        }
+}
+
 
     public void create(MailGroup mailGroup, String userName) {
         List<UserAuthentication> userAuthenticationList = userAuthenticationRepository.findByMailAddress(userName);
@@ -44,17 +49,26 @@ public class MailGroupService {
         }
         user.getMailGroupList().add(newEntry);
         newEntry.setGroupName(mailGroup.getGroupName().toUpperCase());
-        String[] mails = mailGroup.getMailAddresses().split(","); // \\n
-        ArrayList<String> group = new ArrayList<String>();
-        for (String line : mails) {
+        String[] lines = mailGroup.getMailAddresses().split(","); // \\n
+
+        ArrayList<String> myList = new ArrayList<>();
+        for(int i=0; i < lines.length; i++){
+
+            if( !myList.contains(lines[i]) )
+                myList.add(lines[i]);
+        }
+        ArrayList<String> group = new ArrayList<>();
+        for(int i=0;i<myList.size();i++)
+        {
             String regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
             Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(line);
-            if (matcher.matches())
-                group.add(line);
+            Matcher matcher = pattern.matcher(myList.get(i));
+            if(matcher.matches())
+                group.add(myList.get(i));
             else
                 continue;
         }
+
         String string = String.join(",", group);
         newEntry.setMailAddresses(string);
         this.mailGroupRepo.save(newEntry);
@@ -89,20 +103,23 @@ public class MailGroupService {
     }
 
     public String deleteOne(String groupDelete,String username) {
+if(groupDelete=="")
+    return "PLease provide a group Name to delete";
 
-        List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
-        UserAuthentication user=userList.get(0);
-        List<String> list = this.mailGroupRepo.tempQuery(user.getId());
+else{
+            List<UserAuthentication> userList = this.userAuthenticationRepository.findByMailAddress(username);
+            UserAuthentication user = userList.get(0);
+            List<String> list = this.mailGroupRepo.tempQuery(user.getId());
+            if (list.contains(groupDelete.toUpperCase())) {
+                MailGroup mailGroup = this.mailGroupRepo.findBygroupname(groupDelete.toUpperCase(), user.getId());
+                this.mailGroupRepo.delete(mailGroup);
+                return "removed the group successfully";
+            } else {
+                return "Please choose valid group name";
+            }
 
-        if (list.contains(groupDelete.toUpperCase())){
-           MailGroup mailGroup=this.mailGroupRepo.findBygroupname(groupDelete.toUpperCase(),user.getId());
-           this.mailGroupRepo.delete(mailGroup);
-        return "removed the group successfully";}
-        else {
-            return "Please choose valid group name";
         }
-
     }
 }
 
-// bcc and scheduling and not saving same recipient mailAddress
+

@@ -20,6 +20,15 @@ public class MailGroupController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    /*@PostMapping("/group/manageGroups")
+    public boolean manageGroups(HttpServletRequest request){
+        final String requestTokenHeader = request.getHeader("Authorization");
+        if(requestTokenHeader==null)
+            return false;
+        else
+            return true;
+    }*/
+
     @PostMapping("/group/unique")
     public String uniqueGroup(@RequestBody Map<Object,String> req, HttpServletRequest request)
     {

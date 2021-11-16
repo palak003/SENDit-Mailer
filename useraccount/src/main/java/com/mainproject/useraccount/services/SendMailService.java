@@ -6,6 +6,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -21,10 +23,17 @@ public class SendMailService {
     public String sendmail(SendMail mail) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
+            String[] bcc=mail.getMailTo();
+            InternetAddress[] bccAddress = new InternetAddress[bcc.length];
+            for( int i = 0; i < bcc.length; i++ ) {
+                bccAddress[i] = new InternetAddress(bcc[i]);
+            }
+            for( int i = 0; i < bccAddress.length; i++) {
+                mimeMessage.addRecipient(Message.RecipientType.BCC, bccAddress[i]);
+            }
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setSubject(mail.getSubject());
             mimeMessageHelper.setFrom(new InternetAddress(mail.getMailFrom(), "SENDit-Mailer.com"));
-            mimeMessageHelper.setTo(mail.getMailTo());
             mimeMessageHelper.setText(mail.getContent());
 
             javaMailSender.send(mimeMessage);

@@ -45,7 +45,7 @@ public class OtpService{
     public int generateOTP(String mailAddress) {
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
-        otpCache.put(mailAddress, otp);
+        otpCache.put(mailAddress.toLowerCase(), otp);
         return otp;
     }
 

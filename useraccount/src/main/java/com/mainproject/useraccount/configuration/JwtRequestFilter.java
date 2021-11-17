@@ -49,7 +49,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         //validate
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username.toLowerCase());
 
            //set spring security
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {

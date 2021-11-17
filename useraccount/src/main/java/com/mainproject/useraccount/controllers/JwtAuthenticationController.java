@@ -6,7 +6,6 @@ import com.mainproject.useraccount.entity.JwtRequest;
 import com.mainproject.useraccount.entity.JwtResponse;
 import com.mainproject.useraccount.entity.UserAuthentication;
 import com.mainproject.useraccount.repository.UserAuthenticationRepository;
-import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +39,10 @@ public class JwtAuthenticationController {
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
-        int login=authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        int login=authenticate(authenticationRequest.getUsername().toLowerCase(), authenticationRequest.getPassword());
 if(login==1) {
     final UserDetails userDetails = jwtUserDetailsService
-            .loadUserByUsername(authenticationRequest.getUsername());
+            .loadUserByUsername(authenticationRequest.getUsername().toLowerCase());
 
     final String token = jwtTokenUtil.generateToken(userDetails);
     return ResponseEntity.ok(new JwtResponse(token));
@@ -62,10 +61,10 @@ else if(login==0) {
     private int authenticate(String username, String password) throws Exception {
 
 
-        if(CollectionUtils.isEmpty(this.otprepo.findByMailAddress(username)))
+        if(CollectionUtils.isEmpty(this.otprepo.findByMailAddress(username.toLowerCase())))
             return 0;
         else {
-            UserAuthentication user = this.otprepo.findByMailAddress(username).get(0);
+            UserAuthentication user = this.otprepo.findByMailAddress(username.toLowerCase()).get(0);
             if (passwordEncoder.matches(password, user.getPassword()))
                 return 1;
             else

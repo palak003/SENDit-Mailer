@@ -24,7 +24,7 @@ public class MailGroupService {
 
     public String uniqueGroupName(String groupName,String username) {
 if(groupName=="")
-    return "Please provide a group Name";
+    return "Please enter a group Name";
 
 else{
             List<UserAuthentication> userList = this.userAuthenticationRepository.findByMailAddress(username);
@@ -53,7 +53,7 @@ else{
 
         ArrayList<String> myList = new ArrayList<>();
         for(int i=0; i < lines.length; i++){
-
+            lines[i]=lines[i].toLowerCase();
             if( !myList.contains(lines[i]) )
                 myList.add(lines[i]);
         }
@@ -104,7 +104,7 @@ else{
 
     public String deleteOne(String groupDelete,String username) {
 if(groupDelete=="")
-    return "PLease provide a group Name to delete";
+    return "Please enter a group Name to delete";
 
 else{
             List<UserAuthentication> userList = this.userAuthenticationRepository.findByMailAddress(username);
@@ -113,7 +113,7 @@ else{
             if (list.contains(groupDelete.toUpperCase())) {
                 MailGroup mailGroup = this.mailGroupRepo.findBygroupname(groupDelete.toUpperCase(), user.getId());
                 this.mailGroupRepo.delete(mailGroup);
-                return "removed the group successfully";
+                return "Removed the group successfully";
             } else {
                 return "Please choose valid group name";
             }

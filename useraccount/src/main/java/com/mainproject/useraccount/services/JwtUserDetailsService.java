@@ -22,10 +22,10 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
+        List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username.toLowerCase());
         if (!CollectionUtils.isEmpty(userList)) {
             UserAuthentication user = userList.get(0);
-            return new User(user.getMailAddress(), user.getPassword(),
+            return new User(user.getMailAddress().toLowerCase(), user.getPassword(),
                     new ArrayList<>());
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);

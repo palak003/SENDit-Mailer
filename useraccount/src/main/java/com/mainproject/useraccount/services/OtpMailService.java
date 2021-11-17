@@ -36,15 +36,15 @@ public class OtpMailService {
 
     public String signUp(UserAuthentication userDetails)
     {
-        if(!isValid(userDetails.getMailAddress(), userDetails.getPassword())){
+        if(!isValid(userDetails.getMailAddress().toLowerCase(), userDetails.getPassword())){
             return "invalid mail-id/password";
         }
         else{
-            if (!CollectionUtils.isEmpty(this.otpRepo.findByMailAddress(userDetails.getMailAddress()))) {
+            if (!CollectionUtils.isEmpty(this.otpRepo.findByMailAddress(userDetails.getMailAddress().toLowerCase()))) {
                 return "You already have an account please Login";
             } else {
-                int otp = otpService.generateOTP(userDetails.getMailAddress());
-                this.sendOtpMail(userDetails.getMailAddress(), otp);
+                int otp = otpService.generateOTP(userDetails.getMailAddress().toLowerCase());
+                this.sendOtpMail(userDetails.getMailAddress().toLowerCase(), otp);
                 return "Otp Sent";
             }
         }
@@ -55,16 +55,16 @@ public class OtpMailService {
 
         final String FAIL = "Entered Otp is NOT valid. Please Retry!";
         if(givenOtpdetails.getOtp() >= 0){
-            int serverOtp = otpService.getOtp(givenOtpdetails.getMailAddress());
+            int serverOtp = otpService.getOtp(givenOtpdetails.getMailAddress().toLowerCase());
             if(serverOtp > 0){
                 if(givenOtpdetails.getOtp()== serverOtp){
                     UserAuthentication newUser=new UserAuthentication();
                     newUser.setName(givenOtpdetails.getName());
-                    newUser.setMailAddress(givenOtpdetails.getMailAddress());
+                    newUser.setMailAddress(givenOtpdetails.getMailAddress().toLowerCase());
                     newUser.setPassword(passwordEncoder.encode(givenOtpdetails.getPassword()));
                     System.out.println(newUser.getMailAddress());
                     this.otpRepo.save(newUser);
-                    otpService.clearOTP(givenOtpdetails.getMailAddress());
+                    otpService.clearOTP(givenOtpdetails.getMailAddress().toLowerCase());
                     return ("You are registered successfully");
                 }else{
                     return FAIL;
@@ -96,16 +96,16 @@ public class OtpMailService {
     }
 
     public String forgotPass(UserAuthentication forgotDetails)
-    { if(!isValid(forgotDetails.getMailAddress(),forgotDetails.getPassword())){
+    { if(!isValid(forgotDetails.getMailAddress().toLowerCase(),forgotDetails.getPassword())){
         return "invalid mail-id/password";
     }
     else{
-        if(CollectionUtils.isEmpty(this.otpRepo.findByMailAddress(forgotDetails.getMailAddress()))){
+        if(CollectionUtils.isEmpty(this.otpRepo.findByMailAddress(forgotDetails.getMailAddress().toLowerCase()))){
             return "seems like you dont have any account";
         }
         else {
-            int forgotPassOtp = otpService.generateOTP(forgotDetails.getMailAddress());
-            this.sendOtpMail(forgotDetails.getMailAddress(), forgotPassOtp);
+            int forgotPassOtp = otpService.generateOTP(forgotDetails.getMailAddress().toLowerCase());
+            this.sendOtpMail(forgotDetails.getMailAddress().toLowerCase(), forgotPassOtp);
             return "Otp Sent";
         }
     }
@@ -116,15 +116,15 @@ public class OtpMailService {
 
         final String FAIL = "Entered Otp is NOT valid. Please Retry!";
         if(forgotOtpDetails.getOtp()>= 0){
-            int serverForgotOtp = otpService.getOtp(forgotOtpDetails.getMailAddress());
+            int serverForgotOtp = otpService.getOtp(forgotOtpDetails.getMailAddress().toLowerCase());
             if(serverForgotOtp > 0){
                 if(forgotOtpDetails.getOtp()== serverForgotOtp){
 
-                    UserAuthentication updateUser= this.otpRepo.findByMailAddress(forgotOtpDetails.getMailAddress()).get(0);
+                    UserAuthentication updateUser= this.otpRepo.findByMailAddress(forgotOtpDetails.getMailAddress().toLowerCase()).get(0);
                     updateUser.setPassword(passwordEncoder.encode(forgotOtpDetails.getPassword()));
                     this.otpRepo.save(updateUser);
 
-                    otpService.clearOTP(forgotOtpDetails.getMailAddress());
+                    otpService.clearOTP(forgotOtpDetails.getMailAddress().toLowerCase());
                     return ("Changed the password successfully");
                 }else{
                     return FAIL;

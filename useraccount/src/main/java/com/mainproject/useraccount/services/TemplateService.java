@@ -2,20 +2,18 @@ package com.mainproject.useraccount.services;
 
 import com.mainproject.useraccount.configuration.TemplateConfig;
 import com.mainproject.useraccount.entity.MailRequest;
-import com.mainproject.useraccount.entity.MailResponse;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import freemarker.template.Template;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-
-import com.mainproject.useraccount.entity.MailRequest;
-import com.mainproject.useraccount.entity.MailResponse;
-
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,33 +28,44 @@ public class TemplateService  {
     @Autowired
     private TemplateConfig config;
 
+    @Autowired
+    FreeMarkerConfigurer freeMarkerConfigurer;
 
-    public MailResponse sendEmail(MailRequest request, Map<String, Object> model) {
-        MailResponse response = new MailResponse();
+    @Async("threadPoolTaskExecutor")
+    public String sendEmail(MailRequest request, Map<String, Object> model,int value) {
         MimeMessage message = sender.createMimeMessage();
         try {
-            // set mediaType
+            String[] bcc=request.getTo();
+            InternetAddress[] bccAddress = new InternetAddress[bcc.length];
+            for( int i = 0; i < bcc.length; i++ ) {
+                bccAddress[i] = new InternetAddress(bcc[i]);
+            }
+            for( int i = 0; i < bccAddress.length; i++) {
+                message.addRecipient(Message.RecipientType.BCC, bccAddress[i]);
+            }
+            String one="email-template.ftl";
+            String two="email-template2.ftl";
+
             MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
-            // add attachment
-            helper.addAttachment("logo.png", new ClassPathResource("logo.png"));
 
-//            Template t = config.getTemplate("email-template.ftl");
-            Template t = config.getTemplate("email-template.ftl");
-            String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
+            /*helper.addAttachment("logo.png", new ClassPathResource("logo.png"));*/
 
-            helper.setTo(request.getTo());
+
+            Template template = freeMarkerConfigurer.getConfiguration().getTemplate(one);
+            if(value==2)
+                template = freeMarkerConfigurer.getConfiguration().getTemplate(two);
+            String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+
             helper.setText(html , true);
             helper.setSubject(request.getSubject());
             helper.setFrom(request.getFrom());
             sender.send(message);
 
-            response.setMessage("mail send to : " + request.getTo());
-
         } catch (MessagingException | IOException | TemplateException e) {
-            response.setMessage("Mail Sending failure : "+e.getMessage());
+           System.out.println("Sending mail failed");
         }
 
-        return response;
+        return "Template-Mail sent successfully!!!";
     }
 }

@@ -3,7 +3,7 @@ package com.mainproject.useraccount.entity;
 public class MailRequest {
 
     private String name;
-    private String to;
+    private String[] to;
 
     public String getName() {
         return name;
@@ -13,11 +13,11 @@ public class MailRequest {
         this.name = name;
     }
 
-    public String getTo() {
+    public String[] getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(String[] to) {
         this.to = to;
     }
 

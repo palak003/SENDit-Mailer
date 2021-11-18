@@ -14,6 +14,9 @@ public class UserAuthentication {
     private String name;
     private  String mailAddress;
     private String password;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isPremium;
+
     @OneToMany(mappedBy="userAuthentication",cascade= CascadeType.ALL)
     private List<MailGroup> mailGroupList = new ArrayList<>();
 
@@ -28,13 +31,12 @@ public class UserAuthentication {
     public UserAuthentication(){
 
     }
+    public boolean isPremium() {
+        return isPremium;
+    }
 
-    public UserAuthentication(int id,String name,String mailAddress,String password)
-    {
-        this.id=id;
-        this.name=name;
-        this.mailAddress=mailAddress;
-        this.password=password;
+    public void setPremium(boolean premium) {
+        isPremium = premium;
     }
 
     public String getPassword() {

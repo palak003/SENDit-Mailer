@@ -75,5 +75,14 @@ public class MailRequest {
     private String description;
     private String headline;
     private String tagline;
+    private String attachment;
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
 
 }

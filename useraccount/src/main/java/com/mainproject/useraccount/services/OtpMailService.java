@@ -54,7 +54,7 @@ public class OtpMailService {
         final String SUCCESS = "You are registered successfully";
 
         final String FAIL = "Entered Otp is NOT valid. Please Retry!";
-        if(givenOtpdetails.getOtp() >= 0){
+               if(givenOtpdetails.getOtp() >= 0){
             int serverOtp = otpService.getOtp(givenOtpdetails.getMailAddress().toLowerCase());
             if(serverOtp > 0){
                 if(givenOtpdetails.getOtp()== serverOtp){

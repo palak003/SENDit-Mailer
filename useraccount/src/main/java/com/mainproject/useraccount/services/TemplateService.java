@@ -4,6 +4,7 @@ import com.mainproject.useraccount.configuration.TemplateConfig;
 import com.mainproject.useraccount.entity.MailRequest;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import freemarker.template.Template;
@@ -15,6 +16,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -49,7 +51,9 @@ public class TemplateService  {
             MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
 
-            /*helper.addAttachment("logo.png", new ClassPathResource("logo.png"));*/
+
+            FileSystemResource file = new FileSystemResource(new File(request.getAttachment()));
+            helper.addAttachment(request.getName()+".pdf", file);
 
 
             Template template = freeMarkerConfigurer.getConfiguration().getTemplate(one);

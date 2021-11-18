@@ -5,8 +5,6 @@ import com.mainproject.useraccount.entity.MailGroup;
 import com.mainproject.useraccount.repository.UserAuthenticationRepository;
 import com.mainproject.useraccount.services.MailGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,29 +23,6 @@ public class MailGroupController {
 
     @Autowired
     private UserAuthenticationRepository userAuthenticationRepository;
-
-
-   @PostMapping("/group/manageGroups")
-    public ResponseEntity<String> manageGroups(HttpServletRequest request) {
-       final String requestTokenHeader = request.getHeader("Authorization");
-       String jwtToken = null;
-       String userName = null;
-       if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-           jwtToken = requestTokenHeader.substring(7);
-           try {
-               userName = jwtTokenUtil.getUsernameFromToken(jwtToken);
-
-           } catch (IllegalArgumentException e) {
-               System.out.println("Unable to get JWT Token");
-           }
-           return ResponseEntity.status(HttpStatus.OK).body("allowed");
-       }
-       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("not allowed");
-   }
-
-   /*what if the user saw the endpoints and enter this page without permission and access other apis....they will give
-    the error of unauthorised*/
-
 
 
     @PostMapping("/group/unique")

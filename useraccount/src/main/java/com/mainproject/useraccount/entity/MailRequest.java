@@ -9,7 +9,6 @@ public class MailRequest {
     private String description;
     private String headline;
     private String tagline;
-    //private String attachment;
     private int value;
 
     public String getName() {
@@ -77,13 +76,5 @@ public class MailRequest {
     public void setValue(int value) {
         this.value = value;
     }
-
-    /*public String getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(String attachment) {
-        this.attachment = attachment;
-    }*/
 
 }

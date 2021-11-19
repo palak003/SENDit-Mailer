@@ -2,6 +2,7 @@ package com.mainproject.useraccount.services;
 
 import com.mainproject.useraccount.entity.SendMail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -11,6 +12,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 @Component
@@ -32,15 +34,21 @@ public class SendMailService {
                 mimeMessage.addRecipient(Message.RecipientType.BCC, bccAddress[i]);
             }
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            if(mail.getAttachment()=="")
+                return "Please enter the file name";
+
+            String path="C:\\Users\\Pearl\\Desktop\\SENDit-Mailer\\uploads\\"+mail.getAttachment();
+            FileSystemResource file = new FileSystemResource(new File(path));
+            mimeMessageHelper.addAttachment(mail.getName()+".pdf", file);
+
             mimeMessageHelper.setSubject(mail.getSubject());
-            mimeMessageHelper.setFrom(new InternetAddress(mail.getMailFrom(), "SENDit-Mailer.com"));
+            mimeMessageHelper.setFrom(mail.getMailFrom());
             mimeMessageHelper.setText(mail.getContent());
 
             javaMailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return "Mail Sent!!!";

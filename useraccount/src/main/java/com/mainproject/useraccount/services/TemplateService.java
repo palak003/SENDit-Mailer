@@ -54,9 +54,6 @@ public class TemplateService  {
                     StandardCharsets.UTF_8.name());
 
 
-            /*FileSystemResource file = new FileSystemResource(new File(request.getAttachment()));
-            helper.addAttachment(request.getName()+".png", file);*/
-
 
             Template template = freeMarkerConfigurer.getConfiguration().getTemplate(one);
             if(request.getValue()==2)

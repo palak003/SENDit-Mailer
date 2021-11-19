@@ -5,7 +5,6 @@ import com.mainproject.useraccount.entity.MailRequest;
 import com.mainproject.useraccount.services.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 

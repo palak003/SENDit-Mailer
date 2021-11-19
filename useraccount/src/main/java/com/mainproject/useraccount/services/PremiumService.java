@@ -19,13 +19,13 @@ public class PremiumService {
         this.userAuthenticationRepository.save(user);
     }
 
-    public String check(String username) {
+    public Boolean check(String username) {
         List<UserAuthentication> userList = this.userAuthenticationRepository.findByMailAddress(username);
         UserAuthentication user = userList.get(0);
         if(user.isPremium())
-            return "premium";
+            return true;
         else
-            return "non-premium";
+            return false;
 
     }
 

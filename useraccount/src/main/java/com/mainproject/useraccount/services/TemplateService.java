@@ -34,7 +34,7 @@ public class TemplateService  {
     FreeMarkerConfigurer freeMarkerConfigurer;
 
     @Async("threadPoolTaskExecutor")
-    public String sendEmail(MailRequest request, Map<String, Object> model,int value) {
+    public String sendEmail(MailRequest request, Map<String, Object> model) {
         MimeMessage message = sender.createMimeMessage();
         try {
             String[] bcc=request.getTo();
@@ -45,20 +45,26 @@ public class TemplateService  {
             for( int i = 0; i < bccAddress.length; i++) {
                 message.addRecipient(Message.RecipientType.BCC, bccAddress[i]);
             }
-            String one="email-template.ftl";
+            String one="email-template1.ftl";
             String two="email-template2.ftl";
+            String three="email-template3.ftl";
+            String four="email-template4.ftl";
 
             MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
 
 
-            FileSystemResource file = new FileSystemResource(new File(request.getAttachment()));
-            helper.addAttachment(request.getName()+".pdf", file);
+            /*FileSystemResource file = new FileSystemResource(new File(request.getAttachment()));
+            helper.addAttachment(request.getName()+".png", file);*/
 
 
             Template template = freeMarkerConfigurer.getConfiguration().getTemplate(one);
-            if(value==2)
+            if(request.getValue()==2)
                 template = freeMarkerConfigurer.getConfiguration().getTemplate(two);
+            if(request.getValue()==3)
+                template = freeMarkerConfigurer.getConfiguration().getTemplate(three);
+            if(request.getValue()==4)
+                template = freeMarkerConfigurer.getConfiguration().getTemplate(four);
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
             helper.setText(html , true);

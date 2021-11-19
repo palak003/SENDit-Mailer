@@ -12,7 +12,7 @@
             <table width="520" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td  bgcolor="#d3be6c"
-                        style="background-color: yellow; font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #000000; padding: 0px 15px 50px 15px;">
+                        style="background-color: orange;  font-size: 13px; color: #000000; padding: 0px 15px 50px 15px;">
                         <br>
                         <div style="font-size: 48px; color:blue;">
                             <div id="headline">${Headline}</div>
@@ -24,7 +24,7 @@
                                     left: 310px;
                                     top: 28px;
 
-                                    font-family: Roboto;
+                                    font-family: Constantia,Roboto,sans-serif;
                                     font-style: normal;
                                     font-weight: bold;
                                     font-size: 33px;
@@ -48,7 +48,7 @@
                                     left: 370px;
                                     top: 85px;
 
-                                    font-family: Roboto;
+                                    font-family: "Bodoni MT",Roboto;
                                     font-style: normal;
                                     font-weight: bold;
                                     font-size: 30.5px;
@@ -60,6 +60,7 @@
                         <br>
                         <div>
                             <div id="desc">${Description}</div>
+                            <br><br>
                             <div id="logo">
                                 <img src="https://cdn4.iconfinder.com/data/icons/social-media-logos-6/512/112-gmail_email_mail-512.png"
                                      width="20%" alt="Logo Pic">
@@ -100,7 +101,7 @@
                                     left: 531px;
                                     top: 344px;
 
-                                    font-family: Roboto;
+                                    font-family: "Footlight MT Light",Roboto;
                                     font-style: normal;
                                     font-weight: bold;
                                     font-size: 26px;
@@ -112,7 +113,6 @@
 
                                 }
                             </style>
-
                             <br>
                             <!-- <#--                                </div>--> -->
                     </td>

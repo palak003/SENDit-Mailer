@@ -4,6 +4,13 @@ public class MailRequest {
 
     private String name;
     private String[] to;
+    private String from;
+    private String subject;
+    private String description;
+    private String headline;
+    private String tagline;
+    //private String attachment;
+    private int value;
 
     public String getName() {
         return name;
@@ -37,13 +44,6 @@ public class MailRequest {
         this.subject = subject;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
     public String getDescription() {
         return description;
@@ -69,20 +69,21 @@ public class MailRequest {
         this.tagline = tagline;
     }
 
-    private String from;
-    private String subject;
-    private String location;
-    private String description;
-    private String headline;
-    private String tagline;
-    private String attachment;
 
-    public String getAttachment() {
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    /*public String getAttachment() {
         return attachment;
     }
 
     public void setAttachment(String attachment) {
         this.attachment = attachment;
-    }
+    }*/
 
 }

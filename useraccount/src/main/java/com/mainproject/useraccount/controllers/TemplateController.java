@@ -19,15 +19,15 @@ public class TemplateController {
     private TemplateService service;
 
     @PostMapping("/template")
-    public String sendEmail(@RequestBody MailRequest request,@RequestParam(name="value") int value) {
+    public String sendEmail(@RequestBody MailRequest request) {
 
         Map<String,Object> model=new HashMap<>();
         model.put("Name", request.getName());
-        model.put("Location", request.getLocation());
         model.put("Description", request.getDescription());
         model.put("Headline", request.getHeadline());
         model.put("Tagline", request.getTagline());
 
-        return service.sendEmail(request, model,value);
+
+        return service.sendEmail(request, model);
     }
 }

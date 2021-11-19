@@ -65,8 +65,6 @@ else{
             Matcher matcher = pattern.matcher(myList.get(i));
             if(matcher.matches())
                 group.add(myList.get(i));
-            else
-                continue;
         }
 
         String string = String.join(",", group);

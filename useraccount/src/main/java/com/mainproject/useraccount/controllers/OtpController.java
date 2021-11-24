@@ -4,6 +4,8 @@ import com.mainproject.useraccount.entity.Otp;
 import com.mainproject.useraccount.entity.UserAuthentication;
 import com.mainproject.useraccount.services.OtpMailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,25 +18,48 @@ public class OtpController {
 
 
     @PostMapping("/user/generateOtp")
-    public String generateOtp(@RequestBody UserAuthentication details) {
-      return this.otpMailService.signUp(details);
+    public ResponseEntity<?> generateOtp(@RequestBody UserAuthentication details) {
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(this.otpMailService.signUp(details));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
     }
 
     @PostMapping("/user/validate")
-    public String validateOtp(@RequestBody Otp givenOtpDetails) {
-        return this.otpMailService.validateSignUp(givenOtpDetails);
+    public ResponseEntity<?> validateOtp(@RequestBody Otp givenOtpDetails) {
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(this.otpMailService.validateSignUp(givenOtpDetails));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
     }
 
 
     @PostMapping("/user/forgot")
-    public String forgotPass(@RequestBody UserAuthentication forgotdetails)
+    public ResponseEntity<?> forgotPass(@RequestBody UserAuthentication forgotdetails)
+    {try{
+        return ResponseEntity.status(HttpStatus.OK).body( this.otpMailService.forgotPass(forgotdetails));
+    }
+    catch (Exception e)
     {
-        return this.otpMailService.forgotPass(forgotdetails);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+    }
     }
 
     @PostMapping("/user/forgotValidate")
-    public String validateForgotOtp(@RequestBody Otp forgotPassDetails){
-        return this.otpMailService.validateForgotOtp(forgotPassDetails);
+    public ResponseEntity<?> validateForgotOtp(@RequestBody Otp forgotPassDetails){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body( this.otpMailService.validateForgotOtp(forgotPassDetails));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
     }
 
 }

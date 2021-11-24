@@ -53,8 +53,6 @@ public class TemplateService  {
             MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
 
-
-
             Template template = freeMarkerConfigurer.getConfiguration().getTemplate(one);
             if(request.getValue()==2)
                 template = freeMarkerConfigurer.getConfiguration().getTemplate(two);

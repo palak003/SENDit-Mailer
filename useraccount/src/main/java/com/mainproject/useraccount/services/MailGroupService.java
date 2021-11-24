@@ -32,7 +32,6 @@ else{
             List<String> list = this.mailGroupRepo.tempQuery(user.getId());
             if (list.contains(groupName.toUpperCase()))
                 return "Please choose another name";
-
             else
                 return "Added the groupName successfully now upload the mailAddresses";
         }
@@ -48,9 +47,9 @@ else{
             user.setMailGroupList(new ArrayList<>());
         }
         user.getMailGroupList().add(newEntry);
-        newEntry.setGroupName(mailGroup.getGroupName().toUpperCase());
-        String[] lines = mailGroup.getMailAddresses().split(","); // \\n
 
+        newEntry.setGroupName(mailGroup.getGroupName().toUpperCase());
+        String[] lines = mailGroup.getMailAddresses().split("\\r\\n"); // \\n
         ArrayList<String> myList = new ArrayList<>();
         for(int i=0; i < lines.length; i++){
             lines[i]=lines[i].toLowerCase();
@@ -118,6 +117,20 @@ else{
 
         }
     }
+
+    public String[] suggest(String groupInitial,String username) {
+        List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
+        UserAuthentication user=userList.get(0);
+        List<String> list = this.mailGroupRepo.temp2query(groupInitial.toUpperCase(),user.getId());
+        String[] str = new String[list.size()];
+        for (int j = 0; j < list.size(); j++) {
+            str[j] = list.get(j);
+        }
+        return str;
+
+    }
 }
+
+
 
 

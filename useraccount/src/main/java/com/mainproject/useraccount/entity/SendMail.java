@@ -1,14 +1,27 @@
 package com.mainproject.useraccount.entity;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class SendMail {
 
-    public String name;
+
     public String mailFrom;
     public String[] mailTo;
     public String subject;
     public String content;
-    public String attachment;
+    private MultipartFile file;
+
+
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
 
 
     public String getContent() {
@@ -43,21 +56,7 @@ public class SendMail {
         this.mailFrom = mailFrom;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(String attachment) {
-        this.attachment = attachment;
-    }
 
 
 

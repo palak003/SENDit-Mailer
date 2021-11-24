@@ -6,6 +6,7 @@ import com.mainproject.useraccount.repository.UserAuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -78,6 +79,7 @@ public class OtpMailService {
 
     }
 
+@Async
     public void sendOtpMail(String mail, int otp) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
@@ -94,6 +96,7 @@ public class OtpMailService {
             e.printStackTrace();
         }
     }
+
 
     public String forgotPass(UserAuthentication forgotDetails)
     { if(!isValid(forgotDetails.getMailAddress().toLowerCase(),forgotDetails.getPassword())){

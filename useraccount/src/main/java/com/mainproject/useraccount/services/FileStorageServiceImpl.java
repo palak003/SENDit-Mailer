@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService{
-    private final Path root = Paths.get("uploads");
+    private final Path root = Paths.get("./useraccount/src/main/resources/uploads");
 
     @Override
     public void init() {

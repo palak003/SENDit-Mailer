@@ -44,7 +44,7 @@ public class SendMailService {
             }
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-            String path = "C:\\Users\\Pearl\\Desktop\\SENDit-Mailer\\uploads\\" +mail.getFile().getOriginalFilename();
+            String path = "C:\\Users\\Pearl\\Desktop\\SENDit-Mailer\\useraccount\\src\\main\\resources\\uploads\\" +mail.getFile().getOriginalFilename();
             FileSystemResource fileToBeAttached = new FileSystemResource(new File(path));
             mimeMessageHelper.addAttachment("attachment.pdf", fileToBeAttached);
 

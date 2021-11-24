@@ -16,6 +16,10 @@ public class OtpController {
     @Autowired
     private OtpMailService otpMailService;
 
+@GetMapping("/welcome")
+public String welcome(){
+    return "Hello world";
+}
 
     @PostMapping("/user/generateOtp")
     public ResponseEntity<?> generateOtp(@RequestBody UserAuthentication details) {

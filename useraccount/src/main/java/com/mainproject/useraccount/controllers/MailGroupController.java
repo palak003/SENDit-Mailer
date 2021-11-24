@@ -43,9 +43,8 @@ public class MailGroupController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         String userName=userDetails.getUsername();
-        this.mailGroupService.create(mailGroup,userName.toLowerCase());
         try{
-            return ResponseEntity.status(HttpStatus.OK).body("Added the group successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.create(mailGroup,userName.toLowerCase()));
         }
         catch (Exception e)
         {

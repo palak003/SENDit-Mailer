@@ -32,43 +32,49 @@ else{
             List<String> list = this.mailGroupRepo.tempQuery(user.getId());
             if (list.contains(groupName.toUpperCase()))
                 return "Please choose another name";
-            else
+            else {
+                MailGroup newEntry = new MailGroup();
+                newEntry.setUserAuthentication(user);
+                if(CollectionUtils.isEmpty(user.getMailGroupList())){
+                    user.setMailGroupList(new ArrayList<>());
+                }
+                user.getMailGroupList().add(newEntry);
+                newEntry.setGroupName(groupName.toUpperCase());
+                this.mailGroupRepo.save(newEntry);
                 return "Added the groupName successfully now upload the mailAddresses";
+            }
         }
 }
 
 
-    public void create(MailGroup mailGroup, String userName) {
+    public String create(MailGroup mailGroup, String userName) {
         List<UserAuthentication> userAuthenticationList = userAuthenticationRepository.findByMailAddress(userName);
         UserAuthentication user = userAuthenticationList.get(0);
-        MailGroup newEntry = new MailGroup();
-        newEntry.setUserAuthentication(user);
-        if(CollectionUtils.isEmpty(user.getMailGroupList())){
-            user.setMailGroupList(new ArrayList<>());
-        }
-        user.getMailGroupList().add(newEntry);
+        if(!CollectionUtils.isEmpty(this.mailGroupRepo.findBygroupName(mailGroup.getGroupName().toUpperCase(), user.getId()))) {
+            MailGroup newEntry=this.mailGroupRepo.findBygroupName(mailGroup.getGroupName().toUpperCase(),user.getId()).get(0);
+            String[] lines = mailGroup.getMailAddresses().split("\\r\\n"); // \\n
+            ArrayList<String> myList = new ArrayList<>();
+            for (int i = 0; i < lines.length; i++) {
+                lines[i] = lines[i].toLowerCase();
+                if (!myList.contains(lines[i]))
+                    myList.add(lines[i]);
+            }
+            ArrayList<String> group = new ArrayList<>();
+            for (int i = 0; i < myList.size(); i++) {
+                String regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(myList.get(i));
+                if (matcher.matches())
+                    group.add(myList.get(i));
+            }
 
-        newEntry.setGroupName(mailGroup.getGroupName().toUpperCase());
-        String[] lines = mailGroup.getMailAddresses().split("\\r\\n"); // \\n
-        ArrayList<String> myList = new ArrayList<>();
-        for(int i=0; i < lines.length; i++){
-            lines[i]=lines[i].toLowerCase();
-            if( !myList.contains(lines[i]) )
-                myList.add(lines[i]);
+            String string = String.join(",", group);
+            newEntry.setMailAddresses(string);
+            this.mailGroupRepo.save(newEntry);
+            return "Added the group successfully";
         }
-        ArrayList<String> group = new ArrayList<>();
-        for(int i=0;i<myList.size();i++)
-        {
-            String regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(myList.get(i));
-            if(matcher.matches())
-                group.add(myList.get(i));
-        }
-
-        String string = String.join(",", group);
-        newEntry.setMailAddresses(string);
-        this.mailGroupRepo.save(newEntry);
+        else
+            return "GroupName not matched";
     }
 
 

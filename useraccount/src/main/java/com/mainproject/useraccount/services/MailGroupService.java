@@ -71,7 +71,7 @@ else{
             String string = String.join(",", group);
             newEntry.setMailAddresses(string);
             this.mailGroupRepo.save(newEntry);
-            return "Added the group successfully";
+            return "Added the groupName successfully";
         }
         else
             return "GroupName not matched";

@@ -10,17 +10,17 @@ public class SendMail {
     public String[] mailTo;
     public String subject;
     public String content;
-    private MultipartFile file;
+   // private MultipartFile file;
 
 
 
-    public MultipartFile getFile() {
+    /*public MultipartFile getFile() {
         return file;
     }
 
     public void setFile(MultipartFile file) {
         this.file = file;
-    }
+    }*/
 
 
 

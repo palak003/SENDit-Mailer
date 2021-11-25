@@ -19,11 +19,11 @@ public class SendMailController {
 
 
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@ModelAttribute SendMail mail) {
+    public ResponseEntity<?> uploadFile(@RequestBody SendMail mail) {
         String message = "";
         try {
             this.sendMailService.sendmail(mail);
-            message = mail.getFile().getOriginalFilename();
+            //message = mail.getFile().getOriginalFilename();
 
             return ResponseEntity.status(HttpStatus.OK).body(message);
         } catch (Exception e) {

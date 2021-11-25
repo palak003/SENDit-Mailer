@@ -30,7 +30,7 @@ public class SendMailService {
     @Async("threadPoolTaskExecutor")
     public String sendmail(SendMail mail) {
 
-          storageService.save(mail.getFile());
+          //storageService.save(mail.getFile());
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
@@ -44,9 +44,9 @@ public class SendMailService {
             }
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-            String path = "C:\\Users\\Pearl\\Desktop\\SENDit-Mailer\\useraccount\\src\\main\\resources\\uploads\\" +mail.getFile().getOriginalFilename();
+            /*String path = "C:\\Users\\Pearl\\Desktop\\SENDit-Mailer\\useraccount\\src\\main\\resources\\uploads\\" +mail.getFile().getOriginalFilename();
             FileSystemResource fileToBeAttached = new FileSystemResource(new File(path));
-            mimeMessageHelper.addAttachment("attachment.pdf", fileToBeAttached);
+            mimeMessageHelper.addAttachment("attachment.pdf", fileToBeAttached);*/
 
             mimeMessageHelper.setSubject(mail.getSubject());
             mimeMessageHelper.setFrom(mail.getMailFrom());

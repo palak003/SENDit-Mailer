@@ -37,16 +37,10 @@ public class PremiumController {
     }
 
     @GetMapping("/checkPremium")
-    public ResponseEntity<?> checkPremium() {
+    public Boolean checkPremium() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         String userName=userDetails.getUsername();
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(this.premiumService.check(userName.toLowerCase()));
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An Error Occurred");
-        }
+        return this.premiumService.check(userName.toLowerCase());
     }
 }

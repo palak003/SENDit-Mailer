@@ -27,6 +27,7 @@ public class TemplateController {
         model.put("Tagline", request.getTagline());
 
 
-        return service.sendEmail(request, model);
+       this.service.sendEmail(request, model);
+       return "Mail Sent";
     }
 }

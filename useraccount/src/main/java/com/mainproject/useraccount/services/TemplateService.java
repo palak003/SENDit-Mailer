@@ -4,7 +4,6 @@ import com.mainproject.useraccount.configuration.TemplateConfig;
 import com.mainproject.useraccount.entity.MailRequest;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import freemarker.template.Template;
@@ -16,7 +15,6 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -35,6 +33,8 @@ public class TemplateService  {
 
     @Async("threadPoolTaskExecutor")
     public String sendEmail(MailRequest request, Map<String, Object> model) {
+
+
         MimeMessage message = sender.createMimeMessage();
         try {
             String[] bcc=request.getTo();
@@ -66,11 +66,12 @@ public class TemplateService  {
             helper.setSubject(request.getSubject());
             helper.setFrom(request.getFrom());
             sender.send(message);
+            return "Mail sent";
 
         } catch (MessagingException | IOException | TemplateException e) {
            System.out.println("Sending mail failed");
         }
 
-        return "Template-Mail sent successfully!!!";
+        return "Mail sent";
     }
 }

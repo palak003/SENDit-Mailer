@@ -7,7 +7,6 @@ import com.mainproject.useraccount.repository.UserAuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -25,7 +24,6 @@ public class MailGroupService {
     public String uniqueGroupName(String groupName,String username) {
 if(groupName=="")
     return "Please enter a group Name";
-
 else{
             List<UserAuthentication> userList = this.userAuthenticationRepository.findByMailAddress(username);
             UserAuthentication user = userList.get(0);
@@ -45,14 +43,14 @@ else{
             }
         }
 }
-
-
     public String create(MailGroup mailGroup, String userName) {
+        if(mailGroup.getMailAddresses()=="")
+            return "Please upload the mailAddresses";
         List<UserAuthentication> userAuthenticationList = userAuthenticationRepository.findByMailAddress(userName);
         UserAuthentication user = userAuthenticationList.get(0);
         if(!CollectionUtils.isEmpty(this.mailGroupRepo.findBygroupName(mailGroup.getGroupName().toUpperCase(), user.getId()))) {
             MailGroup newEntry=this.mailGroupRepo.findBygroupName(mailGroup.getGroupName().toUpperCase(),user.getId()).get(0);
-            String[] lines = mailGroup.getMailAddresses().split("\\r\\n"); // \\n
+            String[] lines = mailGroup.getMailAddresses().split("\\r\\n");
             ArrayList<String> myList = new ArrayList<>();
             for (int i = 0; i < lines.length; i++) {
                 lines[i] = lines[i].toLowerCase();
@@ -67,18 +65,14 @@ else{
                 if (matcher.matches())
                     group.add(myList.get(i));
             }
-
             String string = String.join(",", group);
             newEntry.setMailAddresses(string);
             this.mailGroupRepo.save(newEntry);
             return "Added the groupName successfully";
         }
         else
-            return "GroupName not matched";
+            return "Please choose a groupName first";
     }
-
-
-
     public String[] getGroupNames(String username) {
         List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
         UserAuthentication user=userList.get(0);
@@ -89,7 +83,6 @@ else{
         }
         return str;
     }
-
     public String[] givegroup(String groupName,String username) {
         List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
         UserAuthentication user=userList.get(0);
@@ -104,7 +97,6 @@ else{
             return new String[]{"Please choose valid group name"};
 
     }
-
     public String deleteOne(String groupDelete,String username) {
 if(groupDelete=="")
     return "Please enter a group Name to delete";
@@ -123,7 +115,6 @@ else{
 
         }
     }
-
     public String[] suggest(String groupInitial,String username) {
         List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);
         UserAuthentication user=userList.get(0);

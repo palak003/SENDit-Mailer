@@ -1,6 +1,7 @@
 package com.mainproject.useraccount.controllers;
 
 
+import com.mainproject.useraccount.entity.NormalMail;
 import com.mainproject.useraccount.entity.SendMail;
 import com.mainproject.useraccount.services.SendMailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,21 @@ public class SendMailController {
 
 
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestBody SendMail mail) {
+    public ResponseEntity<?> uploadFile(@ModelAttribute SendMail mail) {
         String message = "";
         try {
             this.sendMailService.sendmail(mail);
-            //message = mail.getFile().getOriginalFilename();
-
-            return ResponseEntity.status(HttpStatus.OK).body(message);
+    return ResponseEntity.status(HttpStatus.OK).body("Mail Sent");
         } catch (Exception e) {
             message = "Could not upload the file!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
         }
+
+    }
+
+    @PostMapping("/mail")
+    public String mail(@RequestBody NormalMail mail){
+        return this.sendMailService.send(mail);
     }
 
 

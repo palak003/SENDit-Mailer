@@ -64,4 +64,3 @@ public class UseraccountApplication implements CommandLineRunner {
 	}
 }
 
-//attachment rename file, hosting on heroku, thorough reading(multithreading,mapping)

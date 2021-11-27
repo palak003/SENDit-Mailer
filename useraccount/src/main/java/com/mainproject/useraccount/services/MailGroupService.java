@@ -31,25 +31,23 @@ else{
             if (list.contains(groupName.toUpperCase()))
                 return "Please choose another name";
             else {
-                MailGroup newEntry = new MailGroup();
-                newEntry.setUserAuthentication(user);
-                if(CollectionUtils.isEmpty(user.getMailGroupList())){
-                    user.setMailGroupList(new ArrayList<>());
-                }
-                user.getMailGroupList().add(newEntry);
-                newEntry.setGroupName(groupName.toUpperCase());
-                this.mailGroupRepo.save(newEntry);
                 return "Added the groupName successfully now upload the mailAddresses";
             }
         }
 }
     public String create(MailGroup mailGroup, String userName) {
-        if(mailGroup.getMailAddresses()=="")
-            return "Please upload the mailAddresses";
         List<UserAuthentication> userAuthenticationList = userAuthenticationRepository.findByMailAddress(userName);
         UserAuthentication user = userAuthenticationList.get(0);
-        if(!CollectionUtils.isEmpty(this.mailGroupRepo.findBygroupName(mailGroup.getGroupName().toUpperCase(), user.getId()))) {
-            MailGroup newEntry=this.mailGroupRepo.findBygroupName(mailGroup.getGroupName().toUpperCase(),user.getId()).get(0);
+        if(mailGroup.getMailAddresses()=="")
+            return "Please upload the mailAddresses";
+        else{
+            MailGroup newEntry=new MailGroup();
+            newEntry.setUserAuthentication(user);
+            if(CollectionUtils.isEmpty(user.getMailGroupList())){
+                user.setMailGroupList(new ArrayList<>());
+            }
+            user.getMailGroupList().add(newEntry);
+            newEntry.setGroupName(mailGroup.getGroupName().toUpperCase());
             String[] lines = mailGroup.getMailAddresses().split("\\r\\n");
             ArrayList<String> myList = new ArrayList<>();
             for (int i = 0; i < lines.length; i++) {
@@ -70,8 +68,7 @@ else{
             this.mailGroupRepo.save(newEntry);
             return "Added the groupName successfully";
         }
-        else
-            return "Please choose a groupName first";
+
     }
     public String[] getGroupNames(String username) {
         List<UserAuthentication> userList=this.userAuthenticationRepository.findByMailAddress(username);

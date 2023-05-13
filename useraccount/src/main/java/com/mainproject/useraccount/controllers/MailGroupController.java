@@ -1,6 +1,7 @@
 package com.mainproject.useraccount.controllers;
 
 import com.mainproject.useraccount.entity.MailGroup;
+import com.mainproject.useraccount.entity.MailRecipients;
 import com.mainproject.useraccount.services.MailGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,47 +21,43 @@ public class MailGroupController {
 
 
 
-    @PostMapping("/group/unique")
-    public ResponseEntity<?> uniqueGroup(@RequestBody Map<String, String> req)
-    {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        String userName=userDetails.getUsername();
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.uniqueGroupName(req.get("groupName"),userName.toLowerCase()));
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An Error Occurred");
-        }
-    }
-
-
     @PostMapping("/group/addGroup")
-    public ResponseEntity<?> createGroup(@RequestBody MailGroup mailGroup)
+    public ResponseEntity<?> createGroup(@RequestBody MailGroup mailGroup,String mailAddresses)
     {
 
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userName=userDetails.getUsername();
+        try{return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.create(mailGroup,userName,mailAddresses));
+        }
+        catch (Exception e)
+        {return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An Error Occurred");
+        }
+
+    }
+
+    @GetMapping("/group/getGroup")
+    public ResponseEntity<?> getGroup(@RequestParam(name = "groupId") Long groupId)
+    {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         String userName=userDetails.getUsername();
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.create(mailGroup,userName.toLowerCase()));
+            return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.getGroup(userName,groupId));
         }
         catch (Exception e)
         {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An Error Occurred");
         }
-
     }
 
-    @GetMapping("/group/getGroupNames")
+    @GetMapping("/group/getGroups")
     public ResponseEntity<?> getGroups()
     {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         String userName=userDetails.getUsername();
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.getGroupNames(userName.toLowerCase()));
+            return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.getGroups(userName));
         }
         catch (Exception e)
         {
@@ -68,30 +65,29 @@ public class MailGroupController {
         }
     }
 
-    @GetMapping("/group/giveGroupName")
-    public ResponseEntity<?> giveGroup(@RequestParam(name = "groupName") String groupName)
-    {
+    @PutMapping("/group/updateGroup")
+    public ResponseEntity<?> updateGroup(@RequestBody MailGroup mailGroup,String mailAddresses){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         String userName=userDetails.getUsername();
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.givegroup(groupName,userName.toLowerCase()));
+            return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.updateGroup(userName,mailGroup,mailAddresses));
         }
         catch (Exception e)
         {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An Error Occurred");
         }
-
     }
 
    @DeleteMapping("/group/deleteGroup")
-    public ResponseEntity<?> deleteGroup(@RequestBody Map<String, String> req)
+    public ResponseEntity<?> deleteGroup(@RequestBody MailGroup mailGroup)
    {
        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                .getPrincipal();
        String userName=userDetails.getUsername();
        try{
-           return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.deleteOne(req.get("groupDelete"),userName.toLowerCase()));
+           this.mailGroupService.deleteGroup(userName,mailGroup);
+           return ResponseEntity.status(HttpStatus.OK).body("Deleted the group successfully");
        }
        catch (Exception e)
        {
@@ -99,13 +95,29 @@ public class MailGroupController {
        }
    }
 
+    @DeleteMapping("/group/deleteRecipient")
+    public ResponseEntity<?> deleteRecipient(@RequestBody MailGroup mailGroup, @RequestBody MailRecipients mailRecipients)
+    {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        String userName=userDetails.getUsername();
+        try{
+            this.mailGroupService.deleteRecipient(userName,mailGroup,mailRecipients);
+            return ResponseEntity.status(HttpStatus.OK).body("Deleted Recipient successfully");
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An Error Occurred");
+        }
+    }
+
    @GetMapping("/group/suggestions")
-    public ResponseEntity<?> suggestions(@RequestBody Map<String,String> req)
+    public ResponseEntity<?> suggestions(@RequestParam("prefix") String prefix)
    {
        UserDetails userDetails= (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-       String userName=userDetails.getUsername();
+       String username=userDetails.getUsername();
        try{
-           return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.suggest(req.get("groupInitial"),userName.toLowerCase()));
+           return ResponseEntity.status(HttpStatus.OK).body(this.mailGroupService.suggest(username,prefix));
        }
        catch (Exception e)
        {

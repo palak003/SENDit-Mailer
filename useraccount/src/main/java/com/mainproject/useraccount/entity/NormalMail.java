@@ -1,43 +1,33 @@
 package com.mainproject.useraccount.entity;
 
+import lombok.*;
+
+import javax.persistence.*;
+
+@Entity
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "mails")
 public class NormalMail {
 
-    public String mailFrom;
-    public String[] mailTo;
-    public String subject;
-    public String content;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public String getMailFrom() {
-        return mailFrom;
-    }
+    @Column(name = "subject")
+    private String subject;
 
-    public void setMailFrom(String mailFrom) {
-        this.mailFrom = mailFrom;
-    }
+    @Column(name = "content")
+    private String content;
 
-    public String[] getMailTo() {
-        return mailTo;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserAuthentication userAuthentication;
 
-    public void setMailTo(String[] mailTo) {
-        this.mailTo = mailTo;
-    }
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
 
 }

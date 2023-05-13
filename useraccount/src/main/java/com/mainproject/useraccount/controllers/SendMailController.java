@@ -1,13 +1,18 @@
 package com.mainproject.useraccount.controllers;
 
 
+import com.mainproject.useraccount.entity.MailGroup;
 import com.mainproject.useraccount.entity.NormalMail;
 import com.mainproject.useraccount.entity.SendMail;
 import com.mainproject.useraccount.services.SendMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 
 @RestController
@@ -33,9 +38,10 @@ public class SendMailController {
     }
 
     @PostMapping("/mail")
-    public String mail(@RequestBody NormalMail mail){
-        return this.sendMailService.send(mail);
+    public String mail(@RequestBody NormalMail mail, @RequestBody Set<MailGroup> mailGroupSet){
+        UserDetails userDetails= (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username=userDetails.getUsername();
+        return this.sendMailService.send(mail,mailGroupSet,username);
     }
-
 
 }

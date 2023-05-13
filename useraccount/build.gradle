@@ -24,6 +24,8 @@ dependencies {
 	implementation 'com.google.guava:guava:31.0.1-jre'
 	implementation('io.jsonwebtoken:jjwt:0.2')
 	implementation 'org.springframework.boot:spring-boot-starter-freemarker:2.5.6'
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: '0.11.0'
+
 }
 
 test {
